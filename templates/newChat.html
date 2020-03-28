@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>CHAT - FLASK</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="rowr">
+            <div class="col align-self-center">
+                <div class="jumbotron">
+                    <h1 class="display-4">Chat Local</h1>
+                    <p class="lead">Chat Implementado con flask y socket.IO</p>
+                    <hr class="my-4">
+                    <p>Has Click en el Boton Abrir Chat para interactuar con el nuevo chat</p>
+                    <a class="btn btn-primary btn-lg" href="#" role="button" id="btnAbrirChat">Abrir Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalChat">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">CHAT EN VIVO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div >
+                            <ul class="list-gorup" id="messages">                                                        
+                            </ul>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="myMsg">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" id="send">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    //socket.emit('message',"Este es mi mensaje desde el front");
+
+    socket.on('message', (msg) => {
+        $('#messages').append('<li  class="list-group-item">'+msg['time']+': '+msg['msg']+'</li>');
+    });
+
+    $('#send').click((e)=>{
+        var date = new Date();
+        var horaActual = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+        socket.send({
+            msg:$('#myMsg').val(),
+            time:horaActual
+        });
+        $('#myMsg').val('');
+        //comentario para hacer push
+    })
+
+    $(document).ready(function(){
+        console.log("entro jsquert")
+        $('#btnAbrirChat').on('click',(e)=>{            
+            $('#modalChat').modal('show');
+        })
+    })
+</script>
+{% endblock %}

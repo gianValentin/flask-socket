@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 @app.route("/")
 def index():
     titulo = "EJEMPLOS:"
-    lst = ['/user','/chat']
+    lst = ['/user','/chat','/newChat']
     return render_template("index.html",titulo=titulo,lst=lst)
 
 
@@ -44,9 +44,13 @@ def prueba():
 def chat():
     return render_template("chat.html")
 
+@app.route('/newChat')
+def newChat():
+    return render_template("newChat.html")
+
 @socketio.on('message')
 def handleMessage(msg):
-    print("Message :" + msg)
+    print("Message :" + msg['msg'])
     send(msg, broadcast = True)
 
 
