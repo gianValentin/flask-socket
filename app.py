@@ -52,4 +52,4 @@ def handleMessage(msg):
 
 #BLOQUE DE FINALIZADCION
 if __name__ == "__main__":
-    app.run(port=4000,debug=True,host="192.168.0.12")
+    app.run(port=4000,debug=True)
