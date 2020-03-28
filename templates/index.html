@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Home - Flask</title>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ titulo }}</h1>
+    
+    {% for value in lst %}
+    <ul>
+        <li>
+            <a href="..{{value}}" >{{ value }}</a>
+        </li>
+    </ul>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Usuario - Flask</title>
+{% endblock %}
+
+{% block content %}
+    <h2>Formulario de Registro de Usuario</h2>
+    <form id="frmUsuario">        
+        <input type="hidden" name="id">
+        <label for="">Username</label>
+        <input type="text" name="username"><br>
+        <label for="">Password:</label>
+        <input type="password" name="password"><br>
+        <input type="submit" value="Enviar">
+    </form>
+    <script>
+        $(document).ready(function(){
+            $("#frmUsuario").submit((e)=>{
+                e.preventDefault();
+                var frmData = {
+                    'username':$("input[name='username']").val(),
+                    'password':$("input[name='password']").val()
+                }
+                console.log(JSON.stringify(frmData));
+                $.ajax({
+                    url: '/user',
+                    type: 'PUT',
+                    data: JSON.stringify(frmData),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert(response);
+                    }
+                });
+            })
+        })
+    </script>
+{% endblock %}

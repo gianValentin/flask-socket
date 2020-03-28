@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Chat Brian</h1>
+
+    <ul id="messages"></ul>
+    <input type="text" id="myMsg">
+    <button type="button" id="send">Enviar</button>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        //socket.emit('message',"Este es mi mensaje desde el front");
+
+        socket.on('message', (msg) => {
+            $('#messages').append('<li>'+msg+'</li>');
+        });
+
+        $('#send').click((e)=>{
+            socket.send($('#myMsg').val());
+            $('#myMsg').val('');
+        })
+    </script>
+</body>
+</html>
