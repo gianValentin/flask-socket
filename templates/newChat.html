@@ -8,11 +8,12 @@
     <div class="container">
         <div class="rowr">
             <div class="col align-self-center">
-                <div class="jumbotron">
+                <div class="jumbotron mt-3">
                     <h1 class="display-4">Chat Local</h1>
                     <p class="lead">Chat Implementado con flask y socket.IO</p>
                     <hr class="my-4">
                     <p>Has Click en el Boton Abrir Chat para interactuar con el nuevo chat</p>
+                    <input type="text" placeholder="Ingresa tu Nombre:" id="txtNombreUser">
                     <a class="btn btn-primary btn-lg" href="#" role="button" id="btnAbrirChat">Abrir Chat</a>
                 </div>
             </div>
@@ -24,7 +25,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title">CHAT EN VIVO</h5>
+                <h5 class="modal-title">CHAT EN VIVO </h5><img src="../static/img/logoChat.png" alt="logoChat" width="35px">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -59,7 +60,10 @@
     //socket.emit('message',"Este es mi mensaje desde el front");
 
     socket.on('message', (msg) => {
-        $('#messages').append('<li  class="list-group-item">'+msg['time']+': '+msg['msg']+'</li>');
+        var username = msg['username'];
+        if($('#txtNombreUser').val()==msg['username'])
+            username='Tu';
+        $('#messages').append('<li  class="list-group-item"><span id="markChat">'+username+' '+msg['time']+'</span> : '+msg['msg']+'</li>');
     });
 
     $('#send').click((e)=>{
@@ -67,7 +71,8 @@
         var horaActual = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
         socket.send({
             msg:$('#myMsg').val(),
-            time:horaActual
+            time:horaActual,
+            username:$('#txtNombreUser').val()
         });
         $('#myMsg').val('');
         //comentario para hacer push
@@ -76,8 +81,18 @@
     $(document).ready(function(){
         console.log("entro jsquert")
         $('#btnAbrirChat').on('click',(e)=>{            
-            $('#modalChat').modal('show');
+            if($('#txtNombreUser').val()!='')
+                $('#modalChat').modal('show');
         })
     })
 </script>
+{% endblock %}
+
+{% block style %}
+    <style>
+        #markChat {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: cornflowerblue;
+        }
+    </style>
 {% endblock %}
